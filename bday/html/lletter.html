@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
+
+        body {
+            font-family: 'Pangolin', cursive;
+            background: radial-gradient(circle, #000000, #181818);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            flex-direction: column;
+            opacity: 1; 
+            transition: opacity 1s ease-in-out; 
+        }
+        #text {
+            font-size: 20px;
+            width: 80%;
+            max-width: 600px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        #playButton {
+            background-color: rgba(128, 128, 128, 0.418);
+            opacity: 85%;
+            font-family: 'Pangolin', sans-serif;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+        }
+        audio {
+            display: none;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.9; }
+        }
+
+    </style>
+</head>
+<body>
+    <button id="playButton">click if it doesn't autoplay</button>
+    <audio id="audio">
+        <source src="mm.mp3" type="audio/mpeg">
+    </audio>
+    <p id="text"><span id="output"></span><span class="cursor"></span></p>
+
+    <script>
+        const text = `Hi, I know this is quite late, but belated happy birthday. This is the gift that I was talking about when I said I was doing something for you, so hopefully, you still appreciate it even if it was late and even if we're not really in good terms anymore.
+
+I'll keep this short since I don't think you'd care anyways. So, thank you for all the memories we've had, thank you for all the calls, thank you for all the things you've done for me. I really appreciate it a lot, and I won't deny that I really had fun with you and I really loved spending time with you.
+
+I wish you the best, and also in your art journey —your commissions, your animations, your cosplays. I'll be rooting for you, and hopefully, you'll be successful.
+
+And yeah, I think that's all I'm going to say. Again, belated happy birthday, and I love you platonically. Thank you for everything, and this is probably the last message you'll hear from me, so yeah.`;
+
+
+        const output = document.getElementById("output");
+        const audio = document.getElementById("audio");
+        const playButton = document.getElementById("playButton");
+        const duration = 62 * 940; 
+        const typeSpeed = duration / text.length; 
+
+        function typeText() {
+            output.innerHTML = ""; 
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    output.innerHTML += text[i];
+                    i++;
+                    setTimeout(type, typeSpeed);
+                }
+            }
+            type();
+        }
+
+        function startAudioAndText() {
+            audio.muted = false; 
+            audio.play().then(() => {
+                typeText();
+            }).catch(error => {
+                console.error("Autoplay blocked:", error);
+                playButton.style.display = "block"; 
+            });
+        }
+
+     
+        function fadeOutPageAndRedirect() {
+            setTimeout(() => {
+                document.body.style.opacity = 0; 
+                setTimeout(() => {
+                    window.location.href = "intro.html"; 
+                }, 1000); 
+            }, 2000); 
+        }
+
+       
+        audio.addEventListener("ended", fadeOutPageAndRedirect);
+
+        setTimeout(startAudioAndText, 2000); 
+        playButton.addEventListener("click", () => {
+            playButton.style.display = "none";
+            startAudioAndText();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Living Room</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+  <script src="audio.js" defer></script> 
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: "Pangolin", sans-serif;
+      font-size: 20px;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      overflow: hidden;
+      background-color: black; 
+      animation: fadeInBackground 3s ease-in-out; 
+    }
+
+    @keyframes fadeInBackground {
+      0% {
+        background-color: black;
+        opacity: 0;
+      }
+      100% {
+        background-color: black;
+        opacity: 1;
+      }
+    }
+
+ 
+    .background {
+      background-image: url("Untitled design (7).png");
+      height: 100%;
+      width: 100%;
+      background-size: 100% 120%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      animation: fadeInImage 5s ease-in-out;
+    }
+
+    @keyframes fadeInImage {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    .progress-bar-container {
+      width: 300px;
+      height: 40px;
+      border: 2px solid white;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: transparent;
+      z-index: 10;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background-color: white;
+      transition: width 0.5s ease-out;
+    }
+
+    .flame-container {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+    }
+
+    .flame-button {
+      position: absolute;
+      width: 15vw;
+      height: auto;
+      opacity: 0; 
+      transition: opacity 1.5s ease-in;
+      filter: blur(1.5px);
+      pointer-events: auto;
+    }
+
+ 
+    .flame1 { left: -1vw; bottom: 15vh; }
+    .flame2 { left: 28vw; top: 10vh; }
+    .flame3 { left: 58vw; top: -2vh; }
+    .flame4 { left: 82vw; bottom: 40vh; }
+
+
+    #nextButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: rgba(255, 255, 255, 0.534);
+      color: black;
+      border: none;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 1s ease-in;
+      z-index: 10;
+    }
+    
+    #flashlight {
+      --Xpos: 50vw;
+      --Ypos: 50vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 1.5s ease-out;
+    }
+
+    #flashlight:before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: radial-gradient(circle 12em at var(--Xpos) var(--Ypos), rgba(255, 255, 255, 0), rgba(0, 0, 0, 1));
+    }
+
+    @media screen and (max-width: 600px) {
+      #flashlight:before {
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    #completionText {
+  display: none;
+  color: white;
+  font-size: 60px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 2s ease-out;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+}
+
+  </style>
+</head>
+<body>
+
+
+  <div class="background"></div>
+  <div id="flashlight"></div>
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="flame-container">
+    <img src="FLAME.gif" alt="Flame 1" class="flame-button flame1" onclick="handleFlameClick(this)">
+    <img src="FLAME.gif" alt="Flame 2" class="flame-button flame2" onclick="handleFlameClick(this)">
+    <img src="FLAME.gif" alt="Flame 3" class="flame-button flame3" onclick="handleFlameClick(this)">
+    <img src="FLAME.gif" alt="Flame 4" class="flame-button flame4" onclick="handleFlameClick(this)">
+  </div>
+
+  <button id="nextButton" onclick="goToNextPage()">Next</button>
+  <audio id="completionAudio" src="living room.mp3"></audio>
+  <div id="completionText">Living Room: Completed</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fadeInFlames();
+    });
+
+    function fadeInFlames() {
+      setTimeout(() => { document.querySelector('.flame2').style.opacity = 0.7; }, 7000);
+      setTimeout(() => { document.querySelector('.flame3').style.opacity = 0.7; }, 9000);
+      setTimeout(() => { document.querySelector('.flame1').style.opacity = 0.7; }, 10000);
+      setTimeout(() => { document.querySelector('.flame4').style.opacity = 0.7; }, 12000);
+    }
+
+    let clickedFlames = 0;
+
+    function handleFlameClick(flameElement) {
+      if (flameElement.style.opacity === '0') return;
+
+      flameElement.style.opacity = '0';
+      clickedFlames++;
+
+      setTimeout(() => {
+        document.getElementById('progressBar').style.width = `${clickedFlames * 25}%`;
+      }, 500);
+
+      if (clickedFlames === 4) {
+        setTimeout(() => {
+          document.getElementById('progressBar').style.width = '100%';
+          document.getElementById('nextButton').style.opacity = '1';
+               document.getElementById('flashlight').style.opacity = '0'; 
+
+    setTimeout(() => {
+            let completionText = document.getElementById("completionText");
+            completionText.style.display = 'block';  
+            setTimeout(() => {
+              completionText.style.opacity = '1';  
+              let audio = document.getElementById("completionAudio");
+          audio.volume = 0.4; 
+          audio.play();
+        }, 100);
+      }, 1000);
+    }, 1000);
+  }
+}
+
+    function fadeOutFlashlight() {
+      document.getElementById("flashlight").style.opacity = '0'; 
+    }
+
+    function goToNextPage() {
+      window.location.href = 'gameroom.html';
+    }
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let flashlight = document.getElementById("flashlight");
+
+    const isTouchDevice = () => {
+      try {
+        document.createEvent("TouchEvent");
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    function getMousePosition(e) {
+      mouseX = !isTouchDevice() ? e.pageX : e.touches[0].pageX;
+      mouseY = !isTouchDevice() ? e.pageY : e.touches[0].pageY;
+
+      flashlight.style.setProperty("--Xpos", mouseX + "px");
+      flashlight.style.setProperty("--Ypos", mouseY + "px");
+    }
+
+    document.addEventListener("mousemove", getMousePosition);
+    document.addEventListener("touchmove", getMousePosition);
+  </script>
+
+</body>
+</html>

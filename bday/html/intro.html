@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle, #000000, #181818);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Pangolin', sans-serif;
+            flex-direction: column;
+            animation: flicker 2s infinite alternate;
+        }
+
+        #text {
+            font-size: 30px;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        #button {
+            font-family: 'Pangolin', sans-serif;
+            font-size: 24px;
+            color: grey;
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #button:hover {
+            color: rgb(202, 201, 201);
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+            100% { opacity: 0.9; }
+        }
+
+
+        .fade-out {
+            animation: fadeOut 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="text"></div>
+    <button id="button" onclick="nextLine()">boop</button>
+    <audio id="typingSound" src="type.mp3"></audio> 
+    <audio id="boopSound" src="boop.mp3"></audio> 
+
+    <script>
+        const lines = [
+            ".",
+            "hi! let's cut to the chase.",
+            "raine accidentally set the whole house on fire -- don't ask how.",
+            "can you help extinguish the fires please? all you have to do is click the flames, okay?",
+            "though, it's pretty dark here, so... wishing you the best of luck!"
+        ];
+
+        let currentLine = 0;
+        let currentChar = 0;
+        const textElement = document.getElementById('text');
+        const button = document.getElementById('button');
+        const typingSound = document.getElementById('typingSound');
+        const boopSound = document.getElementById('boopSound');
+        let typingInterval;
+
+        function typeLine() {
+            textElement.textContent = lines[currentLine].slice(0, currentChar);
+            
+            if (currentChar === 0) {
+                typingSound.currentTime = 0;  
+                typingSound.play();  
+            }
+
+            if (currentChar < lines[currentLine].length) {
+                currentChar++;
+            } else {
+                clearInterval(typingInterval);
+                typingSound.pause();  
+                button.style.visibility = 'visible'; 
+            }
+        }
+
+        function nextLine() {
+            boopSound.volume = 0.07;
+            boopSound.currentTime = 0; 
+            boopSound.play();  
+
+            if (currentLine < lines.length) {
+                button.style.visibility = 'hidden'; 
+                currentChar = 0;
+                textElement.textContent = ''; 
+                typingInterval = setInterval(typeLine, 50); 
+                currentLine++;
+            }
+        }
+
+        button.addEventListener('click', () => {
+            if (currentLine === lines.length) {
+                document.body.classList.add('fade-out');
+
+                
+                setTimeout(() => {
+                    window.location.href = 'kitchen.html'; 
+                }, 2000); 
+            }
+        });
+    </script>
+</body>
+</html>
