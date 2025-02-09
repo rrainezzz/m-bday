@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.audioPlayer = new Audio("eerie.mp3");
         window.audioPlayer.loop = true;
         window.audioPlayer.autoplay = true;
-        window.audioPlayer.volume = 0.5;
+        window.audioPlayer.volume = 0.8;
 
         let savedTime = localStorage.getItem("audioPosition");
         if (savedTime) {
