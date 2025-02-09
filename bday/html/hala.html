@@ -108,13 +108,19 @@
     <audio id="boopSound" src="boop.mp3"></audio>
 
     <div id="videoContainer">
-        <video id="video" src="0208(3).mp4" muted></video>
+        <video id="video" muted autoplay>
+            <source src="0208(3).mp4" type="video/mp4">
+            <source src="0208(3).webm" type="video/webm">
+            Your browser does not support the video tag.
         <div id="overlayText">it was supposed to resemble a heart</div>
         <button id="boopBelowOverlay" onclick="showSecondVideo()">boop</button>
     </div>
 
     <div id="secondVideoContainer">
-        <video id="secondVideo" src="0208(2).mp4" muted></video>
+        <video id="video" muted autoplay>
+            <source src="0208(2).mp4" type="video/mp4">
+            <source src="0208(2).webm" type="video/webm">
+            Your browser does not support the video tag.
         <div id="newOverlayText">which were then placed here. so care to click the last two flames?</div>
     </div>
 
